@@ -1,0 +1,5 @@
+[".local/share/fonts/CascadiaCode"]
+    type = "archive"
+    url = "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.4.0/CascadiaCode.zip"
+    exact = true
+    include = ["*.ttf"]

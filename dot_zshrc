@@ -1,0 +1,19 @@
+# If you come from bash you might have to change your $PATH.
+export PATH=$HOME/bin:$HOME/.local/bin:/usr/local/bin:$PATH
+
+# Path to your Oh My Zsh installation.
+export ZSH="$HOME/.oh-my-zsh"
+
+# Theme
+ZSH_THEME="robbyrussell"
+
+# Plugins
+plugins=(git)
+
+source $ZSH/oh-my-zsh.sh
+
+# Auto-start tmux for local interactive shells (not inside an existing
+# tmux session already, and only if tmux is actually installed).
+if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ]; then
+  tmux
+fi

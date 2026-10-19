@@ -1,0 +1,7 @@
+alias v="nvim"
+alias c="clear"
+alias e="exit"
+alias ls="eza"
+alias ll="eza -hal"
+alias tree="eza --tree"
+alias sef="set -a; source .env; set +a"

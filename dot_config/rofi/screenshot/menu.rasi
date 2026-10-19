@@ -1,0 +1,85 @@
+/*
+ * Menu de capture, même carte que le menu de session.
+ * Deux choix : écran entier ou zone.
+ */
+
+configuration {
+    show-icons:      false;
+    hover-select:    true;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}
+
+* {
+    bg:        #181825ee;
+    bg-alt:    #31324499;
+    fg:        #cdd6f4;
+    muted:     #6c7086;
+    accent:    #89b4fa;
+    accent-fg: #1e1e2e;
+    font:      "CaskaydiaCove Nerd Font 13";
+}
+
+window {
+    transparency:     "real";
+    location:         center;
+    anchor:           center;
+    width:            320px;
+    border:           1px;
+    border-color:     #cdd6f422;
+    border-radius:    16px;
+    background-color: @bg;
+    padding:          10px;
+}
+
+mainbox {
+    spacing:          8px;
+    background-color: transparent;
+    children:         [ "inputbar", "listview" ];
+}
+
+inputbar {
+    padding:          8px 12px;
+    border-radius:    12px;
+    background-color: @bg-alt;
+    text-color:       @accent;
+    children:         [ "prompt" ];
+}
+
+prompt {
+    background-color: transparent;
+    text-color:       @accent;
+}
+
+entry {
+    enabled: false;
+}
+
+listview {
+    lines:            2;
+    columns:          1;
+    spacing:          2px;
+    cycle:            true;
+    scrollbar:        false;
+    background-color: transparent;
+}
+
+element {
+    padding:          8px 12px;
+    border-radius:    10px;
+    background-color: transparent;
+    text-color:       @fg;
+    cursor:           pointer;
+}
+
+element selected.normal {
+    background-color: @accent;
+    text-color:       @accent-fg;
+}
+
+element-text {
+    background-color: transparent;
+    text-color:       inherit;
+    vertical-align:   0.5;
+    horizontal-align: 0.0;
+}

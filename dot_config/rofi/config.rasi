@@ -1,0 +1,153 @@
+/*
+ * Lanceur inspiré du thème adi1090x des dotfiles,
+ * aligné sur la barre : carte sombre, coins arrondis, sélection en pastille.
+ */
+
+configuration {
+    modi:                "drun";
+    show-icons:          true;
+    drun-display-format: "{name}";
+    display-drun:        "";
+    display-run:         "";
+    display-window:      "";
+    /* Un clic accepte la ligne. Par défaut Rofi réserve ça au double-clic. */
+    hover-select:        true;
+    me-select-entry:     "";
+    me-accept-entry:     "MousePrimary";
+}
+
+* {
+    bg:        #181825ee;
+    bg-alt:    #31324499;
+    fg:        #cdd6f4;
+    muted:     #6c7086;
+    accent:    #89b4fa;
+    accent-fg: #1e1e2e;
+    urgent:    #f38ba8;
+    font:      "CaskaydiaCove Nerd Font 13";
+}
+
+window {
+    transparency:     "real";
+    location:         center;
+    anchor:           center;
+    width:            520px;
+    border:           1px;
+    border-color:     #cdd6f422;
+    border-radius:    16px;
+    background-color: @bg;
+    padding:          10px;
+}
+
+mainbox {
+    spacing:          8px;
+    padding:          4px;
+    background-color: transparent;
+    /* Pas de mode-switcher : le lanceur n'a qu'un mode, « combi ». */
+    children:         [ "inputbar", "listview" ];
+}
+
+inputbar {
+    spacing:          10px;
+    padding:          8px 12px;
+    border-radius:    12px;
+    background-color: @bg-alt;
+    text-color:       @fg;
+    children:         [ "prompt", "entry" ];
+}
+
+prompt {
+    enabled:          true;
+    text-color:       @accent;
+    background-color: transparent;
+}
+
+entry {
+    placeholder:       "Rechercher…";
+    placeholder-color: @muted;
+    background-color:  transparent;
+    text-color:        @fg;
+    cursor:            text;
+}
+
+listview {
+    lines:            8;
+    columns:          1;
+    spacing:          2px;
+    cycle:            true;
+    dynamic:          true;
+    scrollbar:        false;
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element {
+    spacing:          10px;
+    padding:          6px 10px;
+    border-radius:    10px;
+    background-color: transparent;
+    text-color:       @fg;
+    cursor:           pointer;
+}
+
+element normal.normal,
+element alternate.normal {
+    background-color: transparent;
+    text-color:       @fg;
+}
+
+element selected.normal,
+element selected.active {
+    background-color: @accent;
+    text-color:       @accent-fg;
+}
+
+element normal.urgent,
+element alternate.urgent,
+element selected.urgent {
+    background-color: transparent;
+    text-color:       @urgent;
+}
+
+element-icon {
+    size:             20px;
+    background-color: transparent;
+    text-color:       inherit;
+}
+
+element-text {
+    background-color: transparent;
+    text-color:       inherit;
+    vertical-align:   0.5;
+    horizontal-align: 0.0;
+}
+
+mode-switcher {
+    spacing:          6px;
+    background-color: transparent;
+}
+
+button {
+    padding:          6px 10px;
+    border-radius:    10px;
+    background-color: transparent;
+    text-color:       @muted;
+    cursor:           pointer;
+}
+
+button selected {
+    background-color: @bg-alt;
+    text-color:       @accent;
+}
+
+message {
+    padding:          8px 12px;
+    border-radius:    10px;
+    background-color: @bg-alt;
+    text-color:       @fg;
+}
+
+textbox {
+    background-color: transparent;
+    text-color:       @fg;
+}

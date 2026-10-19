@@ -1,0 +1,83 @@
+/*
+ * Fiche KeyHints : grande liste en deux colonnes.
+ * Les espaces insécables du script gardent l'alignement.
+ */
+
+configuration {
+    show-icons:      false;
+    hover-select:    false;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}
+
+* {
+    bg:     #181825ee;
+    bg-alt: #313244;
+    fg:     #cdd6f4;
+    accent: #89b4fa;
+    font:   "CaskaydiaCove Nerd Font Mono 14";
+}
+
+window {
+    transparency:     "real";
+    location:         center;
+    anchor:           center;
+    width:            720px;
+    border:           1px;
+    border-color:     #cdd6f422;
+    border-radius:    16px;
+    background-color: @bg;
+    padding:          12px;
+}
+
+mainbox {
+    spacing:          8px;
+    background-color: transparent;
+    children:         [ "inputbar", "listview" ];
+}
+
+inputbar {
+    padding:          8px 14px;
+    border-radius:    10px;
+    background-color: transparent;
+    text-color:       @accent;
+    children:         [ "prompt" ];
+}
+
+prompt {
+    background-color: transparent;
+    text-color:       @accent;
+}
+
+entry {
+    enabled: false;
+}
+
+listview {
+    lines:            14;
+    columns:          1;
+    spacing:          0px;
+    cycle:            true;
+    scrollbar:        false;
+    background-color: transparent;
+}
+
+element {
+    padding:          7px 14px;
+    border-radius:    8px;
+    background-color: transparent;
+    text-color:       @fg;
+    cursor:           pointer;
+}
+
+element selected.normal {
+    background-color: @bg-alt;
+    text-color:       @fg;
+}
+
+element-text {
+    background-color:  transparent;
+    text-color:        inherit;
+    vertical-align:    0.5;
+    horizontal-align:  0.0;
+}

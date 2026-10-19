@@ -1,0 +1,32 @@
+{{- /* Remplace SDDM par greetd + tuigreet (Fedora uniquement). */ -}}
+{{- /* Le script est relancé dès que son contenu change (config greetd incluse). */ -}}
+{{- if and (eq .chezmoi.os "linux") (eq .chezmoi.osRelease.id "fedora") -}}
+#!/bin/bash
+set -euo pipefail
+
+# --- Paquets -------------------------------------------------------------------
+echo "📦 Installation de greetd + tuigreet..."
+sudo dnf install -y --skip-unavailable greetd greetd-selinux tuigreet
+
+# --- Configuration /etc/greetd/config.toml -------------------------------------
+echo "📝 Écriture de /etc/greetd/config.toml..."
+sudo tee /etc/greetd/config.toml > /dev/null <<'EOF'
+[terminal]
+vt = 1
+
+[default_session]
+command = "tuigreet --time --remember --remember-session --asterisks --cmd sway"
+user = "greetd"
+EOF
+
+# --- Bascule du service display-manager ----------------------------------------
+if systemctl is-enabled --quiet sddm 2>/dev/null; then
+    echo "🔌 Désactivation de SDDM..."
+    sudo systemctl disable sddm
+fi
+
+echo "🔌 Activation de greetd..."
+sudo systemctl enable --force greetd
+
+echo "✅ greetd configuré. Redémarre pour l'utiliser (ne pas arrêter SDDM depuis ta session)."
+{{ end -}}

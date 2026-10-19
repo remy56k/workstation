@@ -1,0 +1,123 @@
+{{- /* Runs only on the Fedora family (Fedora, RHEL, CentOS Stream, Rocky, Alma...). */ -}}
+{{- /* On any other OS the template renders empty, and chezmoi skips empty scripts. */ -}}
+{{- $fedoraFamily := false -}}
+{{- if eq .chezmoi.os "linux" -}}
+{{-   if eq .chezmoi.osRelease.id "fedora" -}}
+{{-     $fedoraFamily = true -}}
+{{-   else if hasKey .chezmoi.osRelease "idLike" -}}
+{{-     if contains "fedora" .chezmoi.osRelease.idLike -}}
+{{-       $fedoraFamily = true -}}
+{{-     end -}}
+{{-   end -}}
+{{- end -}}
+
+{{- if $fedoraFamily -}}
+#!/bin/bash
+# Installs prerequisites on the Fedora family before chezmoi applies the dotfiles.
+# Detected system: {{ .chezmoi.osRelease.id }} {{ .chezmoi.osRelease.versionID }}
+
+set -euo pipefail
+
+{{ if ne .chezmoi.osRelease.id "fedora" -}}
+# --- EPEL (needed on RHEL-like systems for bat, eza, ranger, fzf...) ----------
+if ! rpm -q epel-release &>/dev/null; then
+    echo "📦 Enabling EPEL..."
+    sudo dnf install -y epel-release
+fi
+{{ end -}}
+
+# --- VSCodium ------------------------------------------------------------------
+# Binaires libres de VS Code : https://vscodium.com/
+# Le paquet Fedora s'appelle codium et vient du dépôt RPM de paulcarroty.
+VSCODIUM_REPO="/etc/yum.repos.d/vscodium.repo"
+if [ ! -f "$VSCODIUM_REPO" ]; then
+    echo "📦 Enabling VSCodium repository..."
+    sudo tee "$VSCODIUM_REPO" >/dev/null << 'EOF'
+[gitlab.com_paulcarroty_vscodium_repo]
+name=gitlab.com_paulcarroty_vscodium_repo
+baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/
+enabled=1
+gpgcheck=1
+repo_gpgcheck=1
+gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+metadata_expire=1h
+EOF
+fi
+
+# --- dnf packages --------------------------------------------------------------
+# Fedora package names:
+#   awk -> gawk
+#   fd  -> fd-find
+#   vscodium -> codium
+PACKAGES=(
+    bat
+    codium
+    curl
+    eza
+    fd-find
+    fzf
+    gawk
+    gcc
+    git
+    htop
+    jq
+    qrencode
+    ranger
+    ripgrep
+    tmux
+    kitty
+    zsh
+    zstd
+    fastfetch
+    papirus-icon-theme
+)
+
+# dnf5 (Fedora 41+) uses --skip-unavailable, dnf4 (RHEL...) uses --skip-broken
+if dnf --version 2>/dev/null | grep -q '^dnf5'; then
+    SKIP_FLAG="--skip-unavailable"
+else
+    SKIP_FLAG="--skip-broken"
+fi
+
+echo "📦 Installing packages..."
+sudo dnf install -y "$SKIP_FLAG" "${PACKAGES[@]}"
+
+# Report packages that could not be installed
+MISSING=()
+for pkg in "${PACKAGES[@]}"; do
+    rpm -q "$pkg" &>/dev/null || MISSING+=("$pkg")
+done
+if ((${#MISSING[@]})); then
+    echo "⚠️  Not installed: ${MISSING[*]}"
+fi
+
+# --- Oh My Zsh -----------------------------------------------------------------
+if [ ! -d "$HOME/.oh-my-zsh" ]; then
+    echo "🐚 Installing Oh My Zsh..."
+    # RUNZSH=no    : don't start zsh at the end
+    # CHSH=no      : we change the shell ourselves below
+    # --keep-zshrc : leave the chezmoi-managed .zshrc alone
+    RUNZSH=no CHSH=no sh -c \
+        "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" \
+        "" --unattended --keep-zshrc
+else
+    echo "🐚 Oh My Zsh already installed."
+fi
+
+# --- zsh as default shell ------------------------------------------------------
+ZSH_PATH="$(command -v zsh)"
+if [ "$(getent passwd "$USER" | cut -d: -f7)" != "$ZSH_PATH" ]; then
+    echo "🔁 Setting zsh as default shell..."
+    sudo usermod --shell "$ZSH_PATH" "$USER"
+    echo "   (takes effect at next login)"
+fi
+
+# --- tmux config ---------------------------------------------------------------
+mkdir -p ~/.tmux
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm 2>/dev/null \
+    || echo "tpm déjà présent, clone ignoré."
+
+echo "Dans tmux : prefix + I pour installer les plugins."
+
+echo "✅ Prerequisites installed."
+{{ end -}}

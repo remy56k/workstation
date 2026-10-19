@@ -1,0 +1,58 @@
+# Écran de verrouillage dans le même thème que le bureau.
+# Même fond que Sway, pastille sombre et anneau aux couleurs d'accent.
+
+image=$HOME/.config/backgrounds/027.jpg
+scaling=fill
+
+font=CaskaydiaCove Nerd Font
+font-size=14
+
+ignore-empty-password
+show-failed-attempts
+# indicator-idle-visible
+line-uses-ring
+
+indicator-radius=80
+indicator-thickness=20
+
+# Repos : disque sombre translucide, anneau discret.
+inside-color=#18182599
+ring-color=#45475a
+line-color=#45475a
+separator-color=#181825
+text-color=#cdd6f4
+
+# Touches : segments bleus, retour arrière en rouge.
+key-hl-color=#89b4fa
+bs-hl-color=#f38ba8
+caps-lock-key-hl-color=#f9e2af
+
+# Vérification du mot de passe.
+inside-ver-color=#1e1e2ecc
+ring-ver-color=#89b4fa
+line-ver-color=#89b4fa
+text-ver-color=#cdd6f4
+
+# Mot de passe refusé.
+inside-wrong-color=#181825ee
+ring-wrong-color=#f38ba8
+line-wrong-color=#f38ba8
+text-wrong-color=#f38ba8
+
+# Mot de passe accepté.
+inside-clear-color=#181825ee
+ring-clear-color=#a6e3a1
+line-clear-color=#a6e3a1
+text-clear-color=#a6e3a1
+
+# Verr. maj.
+inside-caps-lock-color=#18182599
+ring-caps-lock-color=#f9e2af
+line-caps-lock-color=#f9e2af
+text-caps-lock-color=#f9e2af
+caps-lock-bs-hl-color=#f38ba8
+
+# Disposition du clavier.
+layout-bg-color=#181825cc
+layout-border-color=#45475a
+layout-text-color=#cdd6f4
