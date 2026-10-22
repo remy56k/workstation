@@ -1,0 +1,36 @@
+/*
+ * Recherche de fichiers via plocate, même thème que le lanceur.
+ * Large fenêtre : les chemins sont longs.
+ */
+
+configuration {
+    show-icons:      false;
+    hover-select:    false;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}
+
+@import "../themes/rounded-purple-glass.rasi"
+
+window {
+    location: center;
+    anchor:   center;
+    y-offset: 0;
+    width:    900px;
+}
+
+mainbox {
+    children: [ "inputbar", "message", "listview" ];
+}
+
+entry {
+    placeholder: "Rechercher un fichier…";
+}
+
+textbox {
+    text-color: @fg2;
+}
+
+listview {
+    lines: 12;
+}

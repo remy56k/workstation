@@ -1,0 +1,9 @@
+/*
+ * Saisie de la recherche : juste la barre, sans liste.
+ */
+
+@import "menu.rasi"
+
+mainbox {
+    children: [ "inputbar", "message" ];
+}

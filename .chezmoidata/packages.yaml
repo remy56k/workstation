@@ -1,0 +1,115 @@
+# Paquets de base pour une nouvelle machine Fedora Sway.
+# chezmoi charge ce fichier comme données de template (dossier caché
+# .chezmoidata/) : il est lu par
+# run_onchange_before_00-fedora-install-packages.sh.tmpl, qui se relance
+# automatiquement à chaque modification de ce fichier.
+# Une autre machine (macOS, autre distro) aurait sa propre clé sous
+# « packages: » et son propre script, comme dans la doc chezmoi :
+# https://www.chezmoi.io/user-guide/advanced/install-packages-declaratively/
+
+packages:
+  fedora:
+    # Dépôts tiers, ajoutés dans l'ordre avant l'installation.
+    # Chaque entrée a un « name » et une seule source :
+    #   rpm      paquet qui installe le dépôt (nom ou URL, $(…) est évalué),
+    #            ignoré si /etc/yum.repos.d/<name>*.repo existe déjà
+    #   url      fichier .repo à télécharger dans /etc/yum.repos.d/<name>.repo
+    #   content  fichier .repo écrit tel quel dans /etc/yum.repos.d/<name>.repo
+    #   copr     dépôt COPR « propriétaire/projet »
+    repos:
+      - name: docker-ce
+        url: https://download.docker.com/linux/fedora/docker-ce.repo
+
+      - name: gh-cli
+        url: https://cli.github.com/packages/rpm/gh-cli.repo
+
+      # Binaires libres de VS Code : https://vscodium.com/
+      - name: vscodium
+        content: |
+          [gitlab.com_paulcarroty_vscodium_repo]
+          name=gitlab.com_paulcarroty_vscodium_repo
+          baseurl=https://paulcarroty.gitlab.io/vscodium-deb-rpm-repo/rpms/
+          enabled=1
+          gpgcheck=1
+          repo_gpgcheck=1
+          gpgkey=https://gitlab.com/paulcarroty/vscodium-deb-rpm-repo/raw/master/pub.gpg
+          metadata_expire=1h
+
+      # Exemples :
+      # - name: rpmfusion-free
+      #   rpm: https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-$(rpm -E %fedora).noarch.rpm
+      # - name: lazygit
+      #   copr: atim/lazygit
+
+    # Paquets dnf, par groupe (le nom du groupe sert juste à s'y retrouver).
+    # Noms Fedora : awk → gawk, fd → fd-find, vscodium → codium.
+    dnf:
+      shell:
+        - zsh
+        - tmux
+        - kitty
+        - fastfetch
+        - htop
+
+      cli:
+        - bat
+        - curl
+        - eza
+        - fd-find
+        - fzf
+        - gawk
+        - jq
+        - plocate
+        - qrencode
+        - ranger
+        - ripgrep
+        - zstd
+
+      dev:
+        - codium
+        - gcc
+        - gh
+        - git
+
+      docker:
+        - docker-ce
+        - docker-ce-cli
+        - containerd.io
+        - docker-buildx-plugin
+        - docker-compose-plugin
+
+      # Ce qu'utilisent les configs sway, rofi, waybar et dunst.
+      desktop:
+        - sway
+        - swaybg
+        - swaylock
+        - waybar
+        - rofi
+        - dunst
+        - libnotify
+        - grim
+        - slurp
+        - grimshot
+        - wl-clipboard
+        - brightnessctl
+        - playerctl
+        - pavucontrol
+        - network-manager-applet
+        - blueman
+        - papirus-icon-theme
+
+    # Applications Flatpak, installées pour tout le système
+    # depuis « remote » (flathub par défaut).
+    flatpak:
+      remote: flathub
+      remotes:
+        - name: flathub
+          url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      apps: []
+      # apps:
+      #   - org.mozilla.firefox
+
+    # Unités systemd activées (et démarrées) après l'installation.
+    services:
+      - plocate-updatedb.timer
+      # - docker.service

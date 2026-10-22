@@ -1,0 +1,20 @@
+/* ROUNDED THEME FOR ROFI — semi-transparent variant of rounded-purple-dark */
+/* Author: Newman Sanchez (https://github.com/newmanls) */
+
+* {
+    bg0:    #212121B3;    /* window: ~70% opaque */
+    bg1:    #2A2A2A99;    /* input bar: ~60% */
+    bg2:    #3D3D3D80;    /* message box: ~50% */
+    bg3:    #AB47BCB3;    /* accent / selection: ~70% */
+    fg0:    #E6E6E6;
+    fg1:    #FFFFFF;
+    fg2:    #969696;
+    fg3:    #8A8A8A;      /* placeholder, brightened to stay readable on a see-through background */
+}
+
+@import "template/rounded-template.rasi"
+
+/* Nerd Font : sans elle, les icônes (loupe, menus) s'affichent mal. */
+* {
+    font: "CaskaydiaCove Nerd Font 12";
+}

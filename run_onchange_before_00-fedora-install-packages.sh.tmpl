@@ -1,0 +1,92 @@
+{{- /* Installe dépôts, paquets, flatpaks et services de .chezmoidata/packages.yaml (clé packages.fedora). */ -}}
+{{- /* Le rendu inclut toute la liste : chezmoi relance le script dès qu'elle change. */ -}}
+{{- /* Uniquement sur Fedora Sway : ailleurs le template est vide et chezmoi l'ignore. */ -}}
+{{- if and (eq .chezmoi.os "linux")
+           (eq .chezmoi.osRelease.id "fedora")
+           (eq (get .chezmoi.osRelease "variantID") "sway") -}}
+{{- $p := .packages.fedora -}}
+#!/bin/bash
+# Paquets de base, générés depuis .chezmoidata/packages.yaml.
+# Système détecté : Fedora {{ .chezmoi.osRelease.versionID }} Sway
+# Pour le relancer à la main :
+#   chezmoi execute-template < "$(chezmoi source-path)/run_onchange_before_00-fedora-install-packages.sh.tmpl" | bash
+
+set -euo pipefail
+
+# --- Dépôts --------------------------------------------------------------------
+{{- range $p.repos }}
+{{-   $file := printf "/etc/yum.repos.d/%s.repo" .name }}
+
+# {{ .name }}
+{{-   if hasKey . "rpm" }}
+if ! compgen -G {{ printf "/etc/yum.repos.d/%s*.repo" .name | quote }} >/dev/null; then
+    echo "📦 Dépôt {{ .name }}..."
+    sudo dnf install -y {{ .rpm | quote }}
+fi
+{{-   else if hasKey . "url" }}
+if [ ! -f {{ $file | quote }} ]; then
+    echo "📦 Dépôt {{ .name }}..."
+    sudo curl -fsSL -o {{ $file | quote }} {{ .url | quote }}
+fi
+{{-   else if hasKey . "content" }}
+if [ ! -f {{ $file | quote }} ]; then
+    echo "📦 Dépôt {{ .name }}..."
+    sudo tee {{ $file | quote }} >/dev/null <<'REPO'
+{{ .content | trim }}
+REPO
+fi
+{{-   else if hasKey . "copr" }}
+if ! dnf repolist --enabled 2>/dev/null | grep -q {{ .copr | replace "/" ":" | quote }}; then
+    echo "📦 COPR {{ .copr }}..."
+    rpm -q dnf5-plugins &>/dev/null || sudo dnf install -y dnf5-plugins
+    sudo dnf copr enable -y {{ .copr | quote }}
+fi
+{{-   end }}
+{{- end }}
+
+# --- Paquets dnf ---------------------------------------------------------------
+PACKAGES=(
+{{- range $group, $list := $p.dnf }}
+    # {{ $group }}
+{{-   range $list }}
+    {{ . | quote }}
+{{-   end }}
+{{- end }}
+)
+
+echo "📦 Installation des paquets..."
+sudo dnf install -y --skip-unavailable "${PACKAGES[@]}"
+
+MISSING=()
+for pkg in "${PACKAGES[@]}"; do
+    rpm -q "$pkg" &>/dev/null || MISSING+=("$pkg")
+done
+if ((${#MISSING[@]})); then
+    echo "⚠️  Non installés : ${MISSING[*]}"
+fi
+
+{{- with $p.flatpak }}
+{{-   if or .remotes .apps }}
+
+# --- Flatpak -------------------------------------------------------------------
+command -v flatpak &>/dev/null || sudo dnf install -y flatpak
+{{-     range .remotes }}
+sudo flatpak remote-add --if-not-exists {{ .name | quote }} {{ .url | quote }}
+{{-     end }}
+{{-     if .apps }}
+echo "📦 Installation des flatpaks..."
+sudo flatpak install -y --noninteractive {{ get . "remote" | default "flathub" | quote }}{{ range .apps }} {{ . | quote }}{{ end }}
+{{-     end }}
+{{-   end }}
+{{- end }}
+
+{{- if $p.services }}
+
+# --- Services ------------------------------------------------------------------
+{{-   range $p.services }}
+sudo systemctl enable --now {{ . | quote }}
+{{-   end }}
+{{- end }}
+
+echo "✅ Paquets installés."
+{{ end -}}
