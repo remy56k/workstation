@@ -7,9 +7,9 @@ configuration {
     modi:                "drun";
     show-icons:          true;
     drun-display-format: "{name}";
-    display-drun:        "";
-    display-run:         "";
-    display-window:      "";
+    display-drun:        " ";
+    display-run:         " ";
+    display-window:      " ";
     /* Un clic accepte la ligne. Par défaut Rofi réserve ça au double-clic. */
     hover-select:        true;
     me-select-entry:     "";
@@ -151,3 +151,7 @@ textbox {
     background-color: transparent;
     text-color:       @fg;
 }
+
+//@theme "/home/remy/.config/rofi/themes/rounded-purple-dark.rasi"
+
+@theme "/home/remy/.config/rofi/themes/rounded-purple-glass.rasi"

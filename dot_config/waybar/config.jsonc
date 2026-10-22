@@ -31,7 +31,8 @@
         "sway/language",
         "battery",
         "clock",
-        "custom/power"
+        "custom/power",
+        "tray"
     ],
     // Modules configuration
     /* Les bureaux 1 à 4 restent affichés même quand ils sont vides. */

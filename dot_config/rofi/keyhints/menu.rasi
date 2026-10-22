@@ -1,0 +1,46 @@
+/*
+ * Fiche KeyHints : grande liste en deux colonnes, filtrable.
+ * Les espaces insécables du script gardent l'alignement.
+ * Les lignes « active » sont les raccourcis de l'utilisateur.
+ */
+
+configuration {
+    show-icons:      false;
+    hover-select:    false;
+    me-select-entry: "";
+    me-accept-entry: "MousePrimary";
+}
+
+@import "../themes/rounded-purple-glass.rasi"
+
+/* Police à chasse fixe, sinon les colonnes ne s'alignent plus. */
+* {
+    font: "CaskaydiaCove Nerd Font Mono 14";
+}
+
+window {
+    location: center;
+    anchor:   center;
+    y-offset: 0;
+    width:    860px;
+}
+
+mainbox {
+    children: [ "inputbar", "message", "listview" ];
+}
+
+entry {
+    placeholder: "Rechercher…";
+}
+
+textbox {
+    text-color: @fg2;
+}
+
+listview {
+    lines: 16;
+}
+
+element {
+    padding: 6px 16px;
+}

@@ -10,11 +10,11 @@ dir="${HOME}/.config/rofi/powermenu"
 theme="${dir}/menu.rasi"
 confirm_theme="${dir}/confirm.rasi"
 
-lock=$'  Verrouiller'
-suspend=$'  Suspendre'
-logout=$'  Déconnexion'
-reboot=$'  Redémarrer'
-shutdown=$'  Éteindre'
+lock=$'   Verrouiller'
+suspend=$'   Suspendre'
+logout=$'   Déconnexion'
+reboot=$'   Redémarrer'
+shutdown=$'   Éteindre'
 
 confirm() {
     local answer

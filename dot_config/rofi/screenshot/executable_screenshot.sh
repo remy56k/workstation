@@ -10,8 +10,8 @@ set -euo pipefail
 dir="${HOME}/.config/rofi/screenshot"
 theme="${dir}/menu.rasi"
 
-screen=$'  Écran entier'
-area=$'  Zone'
+screen=$'   Écran entier'
+area=$'   Zone'
 
 chosen="$(printf '%s\n' "${screen}" "${area}" \
     | rofi -dmenu -i -p 'Capture' -theme "${theme}")"

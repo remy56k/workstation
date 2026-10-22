@@ -19,6 +19,10 @@ command = "tuigreet --time --remember --remember-session --asterisks --cmd sway"
 user = "greetd"
 EOF
 
+
+# --- Date et heure -------------------------------------------------------------
+sudo timedatectl set-timezone Europe/Paris
+
 # --- Bascule du service display-manager ----------------------------------------
 if systemctl is-enabled --quiet sddm 2>/dev/null; then
     echo "🔌 Désactivation de SDDM..."

@@ -9,72 +9,38 @@ configuration {
     me-accept-entry: "MousePrimary";
 }
 
-* {
-    bg:        #181825ee;
-    bg-alt:    #31324499;
-    fg:        #cdd6f4;
-    muted:     #6c7086;
-    accent:    #89b4fa;
-    accent-fg: #1e1e2e;
-    urgent:    #f38ba8;
-    font:      "CaskaydiaCove Nerd Font 13";
-}
+@import "../themes/rounded-purple-glass.rasi"
 
 window {
-    transparency:     "real";
-    location:         center;
-    anchor:           center;
-    width:            320px;
-    border:           1px;
-    border-color:     #cdd6f422;
-    border-radius:    16px;
-    background-color: @bg;
-    padding:          10px;
+    location: center;
+    anchor:   center;
+    y-offset: 0;
+    width:    320px;
 }
 
 mainbox {
-    spacing:          8px;
-    background-color: transparent;
-    children:         [ "message", "listview" ];
+    children: [ "message", "listview" ];
 }
 
+/* Le message passe en tête : pas de marge au-dessus. */
 message {
-    padding:          8px 12px;
-    border-radius:    12px;
-    background-color: @bg-alt;
-    text-color:       @fg;
+    margin: 0;
 }
 
 textbox {
-    background-color: transparent;
-    text-color:       inherit;
     horizontal-align: 0.5;
 }
 
 listview {
-    lines:            1;
-    columns:          2;
-    spacing:          8px;
-    cycle:            true;
-    scrollbar:        false;
-    background-color: transparent;
+    lines:   1;
+    columns: 2;
+    spacing: 8px;
 }
 
 element {
-    padding:          8px 12px;
-    border-radius:    10px;
-    background-color: @bg-alt;
-    text-color:       @fg;
-    cursor:           pointer;
-}
-
-element selected.normal {
-    background-color: @accent;
-    text-color:       @accent-fg;
+    background-color: @bg2;
 }
 
 element-text {
-    background-color:  transparent;
-    text-color:        inherit;
-    horizontal-align:  0.5;
+    horizontal-align: 0.5;
 }

@@ -17,3 +17,10 @@ source $ZSH/oh-my-zsh.sh
 if command -v tmux >/dev/null 2>&1 && [ -z "$TMUX" ]; then
   tmux
 fi
+
+# fnm
+FNM_PATH="/home/remy/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="$FNM_PATH:$PATH"
+  eval "$(fnm env --shell zsh)"
+fi
